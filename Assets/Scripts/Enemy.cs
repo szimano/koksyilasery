@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
+	public float health = 150f;
+
+	void OnTriggerEnter2D(Collider2D collider) {
+		Laser laser = collider.gameObject.GetComponent<Laser>();
+		if (laser != null) {
+			Hit(laser);	
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	void Hit(Laser laser) {
+		health -= laser.damage;
+		if (health <= 0) {
+			Destroy(gameObject);
+		}
+		Destroy(laser.gameObject);
 	}
 }
