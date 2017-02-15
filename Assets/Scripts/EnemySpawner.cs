@@ -13,6 +13,8 @@ public class EnemySpawner : MonoBehaviour {
 	private bool goLeft = true;
 	public float speed;
 
+	public float spawnDelay = 0.5f;
+
 	private float xmin;
 	private float xmax;
 
@@ -25,9 +27,19 @@ public class EnemySpawner : MonoBehaviour {
 		xmin = leftMost.x;
 		xmax = rightMost.x;
 
-		foreach(Transform child in transform) {
-			GameObject enemy = Instantiate(enemyPrefab, child.transform.position, Quaternion.identity);
-			enemy.transform.parent = child;	
+		ReSpawnEnemies();
+	}
+
+	void ReSpawnEnemies() {
+		SpawnUntilFull();
+	}
+
+	void SpawnUntilFull() {
+		Transform position = NextFreePosition();
+		if (position) {
+			GameObject enemy = Instantiate(enemyPrefab, position.position, Quaternion.identity);
+			enemy.transform.parent = position;	
+			Invoke("SpawnUntilFull", spawnDelay);
 		}
 	}
 
@@ -48,5 +60,28 @@ public class EnemySpawner : MonoBehaviour {
 				goLeft = true;
 			}
 		}
+
+		if (AllMembersDead()) {
+			ReSpawnEnemies();
+		}
+	}
+
+	Transform NextFreePosition() {
+		foreach(Transform childPosition in transform) {
+			if (childPosition.childCount == 0) {
+				return childPosition;
+			}
+		}
+
+		return null;
+	}
+
+	bool AllMembersDead() {
+		foreach(Transform childPosition in transform) {
+			if (childPosition.childCount > 0) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

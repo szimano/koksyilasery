@@ -13,6 +13,10 @@ public class PlayerController : MonoBehaviour {
 
 	public float firingRate = 0.2f;
 
+	public float health = 200f;
+
+	public AudioClip looseSound;
+
 	float xmin;
 	float xmax;
 
@@ -46,5 +50,15 @@ public class PlayerController : MonoBehaviour {
 		// stay within gamespace
 		float newX = Mathf.Clamp(transform.position.x, xmin, xmax);
 		transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+	}
+
+	// Use this for initialization
+	void OnTriggerEnter2D(Collider2D collider) {
+		health -= 50f;
+
+		if (health <= 0f) {
+			AudioSource.PlayClipAtPoint(looseSound, transform.position);
+			Destroy(gameObject);
+		}
 	}
 }
