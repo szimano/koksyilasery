@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class ScoreKeeper : MonoBehaviour {
 
-	private int score = 0;
+	public static int score = 0;
 
 	public void Score(int points) {
 		score += points;
 	}
 
-	public void Reset() {
+	public static void Reset() {
 		score = 0;
 	}
 
