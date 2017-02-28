@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour {
 
 	public float health = 200f;
 
+	public GameObject explosionPrefab;
+
 	public AudioClip looseSound;
 
 	float xmin;
@@ -57,6 +59,7 @@ public class PlayerController : MonoBehaviour {
 		health -= 50f;
 
 		if (health <= 0f) {
+			Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 			AudioSource.PlayClipAtPoint(looseSound, transform.position);
 			LevelManager man = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 			man.LoadLevel("Win Screen");

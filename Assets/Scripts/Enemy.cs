@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour {
 
 	public int scoreValue = 150;
 
+	public GameObject explosionPrefab;
+
 	private ScoreKeeper scoreKeeper;
 
 	void Start() {
@@ -36,6 +38,7 @@ public class Enemy : MonoBehaviour {
 	void Hit(Laser laser) {
 		health -= laser.damage;
 		if (health <= 0) {
+			Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 			Destroy(gameObject);
 			scoreKeeper.Score(scoreValue);
 		}
