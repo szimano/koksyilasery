@@ -19,11 +19,15 @@ public class PlayerController : MonoBehaviour {
 
 	public AudioClip looseSound;
 
+    private HealthKeeper healthKeeper;
+
 	float xmin;
 	float xmax;
 
 	void Start () {
-		float distance = transform.position.z - Camera.main.transform.position.z;
+        healthKeeper = GameObject.Find("Health").GetComponent <HealthKeeper>();
+
+        float distance = transform.position.z - Camera.main.transform.position.z;
 		Vector3 leftMost = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance));
 		Vector3 rightMost = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, distance));
 
@@ -57,8 +61,10 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void OnTriggerEnter2D(Collider2D collider) {
 		health -= 50f;
+        healthKeeper.Health(health);
 
-		if (health <= 0f) {
+        if (health <= 0f) {
+            HealthKeeper.Reset();
 			Instantiate(explosionPrefab, transform.position, Quaternion.identity);
 			AudioSource.PlayClipAtPoint(looseSound, transform.position);
 			LevelManager man = GameObject.Find("LevelManager").GetComponent<LevelManager>();
